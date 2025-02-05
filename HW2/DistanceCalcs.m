@@ -4,7 +4,7 @@
 % the readings from the SONAR. 
 
 
-% data = readcell("Block 2 Data Template.xlsx", 'useExcel', true, 'Sheet', "Part 3.1 SONAR Measurement");
+data = readcell("Block 2 Data Template.xlsx", 'useExcel', true, 'Sheet', "Part 3.1 SONAR Measurement");
 close all
 roomTemp = 21.9; %Celsius
 ratioSpecHeats = 1.4;
