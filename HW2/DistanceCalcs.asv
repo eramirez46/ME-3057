@@ -1,0 +1,12 @@
+% Script Name: Distance Calculations Script
+% 
+% The purpose of this script is to output the calculated distance based on
+% the readings from the SONAR. 
+
+ME_3057_Homework_02;
+t_input = 0.125; % ms
+t_mic = 1.25; % ms
+t_reflection = 3.9; % ms
+
+calculatedDistance = calculateDistance(t_input, t_mic, t_reflection, c_theory);
+

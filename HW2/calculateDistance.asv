@@ -1,0 +1,5 @@
+function calculatedDistance = calculateDistance(tInput,tMic,tReflection, speed)
+
+tDeltaMic = t
+tDeltaTarget = tReflection - tMic;
+dTarget2Mic = Vsound
