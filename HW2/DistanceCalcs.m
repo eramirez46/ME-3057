@@ -33,6 +33,7 @@ reflection1200 = target1200 - baseline;
 reflection1300 = target1300 - baseline;
 
 timeRange = time <= 0.006;
+figure
 hold on
 plot(time(timeRange), baseline(timeRange) + 5);
 plot(time(timeRange), target5000(timeRange) + 5.1);
@@ -43,7 +44,7 @@ xlabel("Time (s)");
 
 tInput = 0.0001; % seconds
 tMic = 0.001425; % seconds
-experimentalBias = 5;
+experimentalBias = 33;
 
 % Calculate Distance for 0.5 meters:
 [~, peakPos5000] = max(reflection5000);
@@ -92,3 +93,21 @@ fprintf("Calculated Distance (1.2m): %.4f\n", distance1200);
 tReflection1300 = time(peakPos1300 - experimentalBias); % seconds
 distance1300 = calculateDistance(tInput,tMic,tReflection1300,cTheory);
 fprintf("Calculated Distance (1.3m): %.4f\n", distance1300);
+
+% plot Calculated Distance vs. Measured Distance (within 1 Meter):
+
+measuredDistances = [1.0 1.1 1.2 1.3];
+calculatedDistances = [distance1000 distance1100 distance1200 distance1300];
+deviation = abs(calculatedDistances - measuredDistances);
+tolerance = 0.01; % meters, defined by Julie (the Client)
+withinTolerance = all(deviation < 0.01);
+
+figure
+hold on
+plot(measuredDistances, measuredDistances)
+plot(measuredDistances, calculatedDistances, 'o')
+xlabel('Actual Distance (m)')
+ylabel('Experimental Distance (m)')
+xline(1.1)
+title('Experimental vs. Actual Distance (beyond 1m)')
+legend('Measured Distances', 'Calculated Distances', 'Deviation > 0.1')
