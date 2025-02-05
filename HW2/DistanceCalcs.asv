@@ -3,10 +3,33 @@
 % The purpose of this script is to output the calculated distance based on
 % the readings from the SONAR. 
 
-ME_3057_Homework_02;
-t_input = 0.125; % ms
-t_mic = 1.25; % ms
-t_reflection = 3.9; % ms
 
-calculatedDistance = calculateDistance(t_input, t_mic, t_reflection, c_theory);
+% data = readcell("Block 2 Data Template.xlsx", 'useExcel', true, 'Sheet', "Part 3.1 SONAR Measurement");
 
+roomTemp = 21.9; %Celsius
+ratioSpecHeats = 1.4;
+idealGasConstant = 286.9;
+cTheory = sqrt((roomTemp + 273.15).*ratioSpecHeats.*idealGasConstant);
+
+dataRange = (6:2005); % rows to select data from, 2000 data points total
+time = cell2mat(data(dataRange,1)); % seconds
+input = cell2mat(data(dataRange,2)); % volts
+baseline = cell2mat(data(dataRange, 4));
+target5000 = cell2mat(data(dataRange, 6));
+target6250 = cell2mat(data(dataRange, 8));
+target7500 = cell2mat(data(dataRange, 10));
+target8250 = cell2mat(data(dataRange, 12));
+target1000 = cell2mat(data(dataRange, 14));
+target1100 = cell2mat(data(dataRange, 18));
+target1200 = cell2mat(data(dataRange, 21));
+target1300 = cell2mat(data(dataRange, 24));
+
+reflection = target5000 - baseline;
+
+hold on
+plot(time, baseline + 5);
+plot(time_ms, target5000 + 5.1);
+plot(time_ms, input + 5.7);
+plot(time_ms, reflection + 4.9);
+legend("Baseline", "Target (Avg)", "Input", "Reflection")
+xlabel("Time (ms)");
