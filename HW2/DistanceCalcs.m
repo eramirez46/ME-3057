@@ -4,6 +4,6 @@
 % the readings from the SONAR. 
 
 
-readcell("Block 2 Data Template.xlsx", 'useExcel', true, 'Sheet');
+data = readcell("Block 2 Data Template.xlsx", 'useExcel', true, 'Sheet', "Part 3.1 SONAR Measurement");
 
 
