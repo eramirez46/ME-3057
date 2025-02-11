@@ -4,7 +4,7 @@
 % the readings from the SONAR. 
 
 
-data = readcell("Block 2 Data Template.xlsx", 'useExcel', true, 'Sheet', "Part 3.1 SONAR Measurement");
+% data = readcell("Block 2 Data Template.xlsx", 'useExcel', true, 'Sheet', "Part 3.1 SONAR Measurement");
 close all
 roomTemp = 21.9; %Celsius
 ratioSpecHeats = 1.4;
@@ -44,7 +44,8 @@ xlabel("Time (s)");
 
 tInput = 0.0001; % seconds
 tMic = 0.001425; % seconds
-experimentalBias = 33;
+experimentalBias = 20;
+fprintf("Experimental Bias: %.4f\n", experimentalBias);
 
 % Calculate Distance for 0.5 meters:
 [~, peakPos5000] = max(reflection5000);
@@ -94,20 +95,43 @@ tReflection1300 = time(peakPos1300 - experimentalBias); % seconds
 distance1300 = calculateDistance(tInput,tMic,tReflection1300,cTheory);
 fprintf("Calculated Distance (1.3m): %.4f\n", distance1300);
 
+% Measured Distances
+s_encoder = 120; % ticks/rev, encoder sensitivity
+D_wheel = 0.0411; % m, encoder wheel diameter
+encoderWithinValues = [465 581 697 767 929];
+encoderWithinDistances = round(encoderDistance(encoderWithinValues), 3, 'decimals');
+encoderBeyondValues = [929 1022 1115 1208];
+encoderBeyondDistances = round(encoderDistance(encoderBeyondValues), 4, 'decimals');
 % plot Calculated Distance vs. Measured Distance (within 1 Meter):
-
-measuredDistances = [1.0 1.1 1.2 1.3];
-calculatedDistances = [distance1000 distance1100 distance1200 distance1300];
-deviation = abs(calculatedDistances - measuredDistances);
-tolerance = 0.01; % meters, defined by Julie (the Client)
-withinTolerance = all(deviation < 0.01);
-
+withinDistances = [encoderWithinDistances(1) distance5000; encoderWithinDistances(2) distance6250; encoderWithinDistances(3) distance7500; encoderWithinDistances(4) distance8250; encoderWithinDistances(5) distance1000];
+actualWithinDistances = categorical({'0.500', '0.625', '0.750', '0.825', '1.000'});
+figure
+barWidth = 2;
+hold on
+withinBar = bar(actualWithinDistances, withinDistances);
+legend('Measured Distances', 'Sonar Distances');
+xlabel('Expected Distances (m)')
+ylabel('Distance (m)')
+ylim([0.4 1.2])
+title('Measured vs. Expected Distance (within 1m)')
+% plot Calculated Distance vs. Measured Distance (Beyond 1 Meter):
+beyondDistances = [encoderBeyondDistances(1) distance1000; encoderBeyondDistances(2) distance1100; encoderBeyondDistances(3) distance1200; encoderBeyondDistances(4) distance1300];
+actualBeyondDistances = categorical({'1.000', '1.100', '1.200', '1.300'});
 figure
 hold on
-plot(measuredDistances, measuredDistances)
-plot(measuredDistances, calculatedDistances, 'o')
-xlabel('Actual Distance (m)')
-ylabel('Experimental Distance (m)')
-xline(1.1)
-title('Experimental vs. Actual Distance (beyond 1m)')
-legend('Measured Distances', 'Calculated Distances', 'Deviation > 0.1')
+beyondBar = bar(actualBeyondDistances, beyondDistances);
+xtips1 = beyondBar(1).XEndPoints;
+ytips1 = beyondBar(1).YEndPoints;
+labels1 = string(beyondBar(1).YData);
+text(xtips1, ytips1, labels1, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom')
+xtips2 = beyondBar(2).XEndPoints;
+ytips2 = beyondBar(2).YEndPoints;
+labels2 = string(beyondBar(2).YData);
+text(xtips2,ytips2,labels2,'HorizontalAlignment','center',...
+    'VerticalAlignment','bottom')
+legend('Measured Distances', 'Sonar Distances');
+xlabel('Expected Distances (m)');
+ylabel('Distance (m)');
+title('Measured vs. Expected Distance (beyond 1m)');
+ylim([0.8 1.7]);
+
