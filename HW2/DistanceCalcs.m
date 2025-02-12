@@ -126,6 +126,7 @@ labels2 = string(withinBar(2).YData);
 text(xtips2,ytips2,labels2, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
 % Deviation Calculations (within):
 withinDeviation = abs(encoderWithinDistances - calculatedWithinDistances);
+avgWithinDeviation = mean(withinDeviation)
 [maxWithinDeviation, maxWithinDevPos] = max(withinDeviation);
 % plot Calculated Distance vs. Measured Distance (Beyond 1 Meter):
 beyondDistances = [encoderBeyondDistances(1) distance1000; encoderBeyondDistances(2) distance1100; encoderBeyondDistances(3) distance1200; encoderBeyondDistances(4) distance1300];
@@ -149,5 +150,6 @@ title('Measured vs. Expected Distance (beyond 1m)');
 ylim([0.8 1.7]);
 % Deviation Calculations (beyond):
 beyondDeviation = abs(encoderBeyondDistances - calculatedBeyondDistances);
+avgBeyondDeviation = mean(beyondDeviation)
 [maxBeyondDeviation, maxBeyondDevPos] = max(beyondDeviation);
 fprintf("Max Deviations:\nWithin (m): %.4f m\nBeyond (m): %.4f m\n", maxWithinDeviation, maxBeyondDeviation)

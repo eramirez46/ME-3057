@@ -19,4 +19,4 @@ tDeltaTarget = tReflection - tMic;
 dMic2Source = Vsound.*tDeltaMic;
 dTarget2Mic = Vsound.*(tDeltaTarget/2);
 
-calculatedDistance = (dMic2Source + dTarget2Mic);
+calculatedDistance = round((dMic2Source + dTarget2Mic), 3);
