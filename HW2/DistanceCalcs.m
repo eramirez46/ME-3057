@@ -101,7 +101,9 @@ D_wheel = 0.0411; % m, encoder wheel diameter
 encoderWithinValues = [465 581 697 767 929];
 encoderWithinDistances = round(encoderDistance(encoderWithinValues), 3, 'decimals');
 encoderBeyondValues = [929 1022 1115 1208];
-encoderBeyondDistances = round(encoderDistance(encoderBeyondValues), 4, 'decimals');
+encoderBeyondDistances = round(encoderDistance(encoderBeyondValues), 3, 'decimals');
+calculatedWithinDistances = [distance5000 distance6250 distance7500 distance8250 distance1000];
+calculatedBeyondDistances = [distance1000 distance1100 distance1200 distance1300];
 % plot Calculated Distance vs. Measured Distance (within 1 Meter):
 withinDistances = [encoderWithinDistances(1) distance5000; encoderWithinDistances(2) distance6250; encoderWithinDistances(3) distance7500; encoderWithinDistances(4) distance8250; encoderWithinDistances(5) distance1000];
 actualWithinDistances = categorical({'0.500', '0.625', '0.750', '0.825', '1.000'});
@@ -122,20 +124,9 @@ xtips2 = withinBar(2).XEndPoints;
 ytips2 = withinBar(2).YEndPoints;
 labels2 = string(withinBar(2).YData);
 text(xtips2,ytips2,labels2, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
-% Error Bars:
-withinDeviation = abs(encoderWithinDistances - [distance5000 distance6250 distance7500 distance8250 distance1000]);
-% Find x-coordinates of each bar
-numGroups = size(withinDistances, 1);
-numBarsPerGroup = size(withinDistances, 2);
-% Get bar positions
-xWithinPositions = nan(numGroups, numBarsPerGroup);
-for i = 1:numBarsPerGroup
-    xWithinPositions(:, i) = withinBar(i).XEndPoints; % Get x-coordinates
-end
-
-% Overlay error bars (assuming sonar is first and encoder is second in each group)
-errorbar(xWithinPositions(:, 1), [distance5000 distance6250 distance7500 distance8250 distance1000], withinDeviation, 'k.', 'LineWidth', 1.5);
-
+% Deviation Calculations (within):
+withinDeviation = abs(encoderWithinDistances - calculatedWithinDistances);
+[maxWithinDeviation, maxWithinDevPos] = max(withinDeviation);
 % plot Calculated Distance vs. Measured Distance (Beyond 1 Meter):
 beyondDistances = [encoderBeyondDistances(1) distance1000; encoderBeyondDistances(2) distance1100; encoderBeyondDistances(3) distance1200; encoderBeyondDistances(4) distance1300];
 actualBeyondDistances = categorical({'1.000', '1.100', '1.200', '1.300'});
@@ -156,4 +147,7 @@ xlabel('Expected Distances (m)');
 ylabel('Distance (m)');
 title('Measured vs. Expected Distance (beyond 1m)');
 ylim([0.8 1.7]);
-
+% Deviation Calculations (beyond):
+beyondDeviation = abs(encoderBeyondDistances - calculatedBeyondDistances);
+[maxBeyondDeviation, maxBeyondDevPos] = max(beyondDeviation);
+fprintf("Max Deviations:\nWithin (m): %.4f m\nBeyond (m): %.4f m\n", maxWithinDeviation, maxBeyondDeviation)
