@@ -44,7 +44,7 @@ xlabel("Time (s)");
 
 tInput = 0.0001; % seconds
 tMic = 0.001425; % seconds
-experimentalBias = 20;
+experimentalBias = 33;
 fprintf("Experimental Bias: %.4f\n", experimentalBias);
 
 % Calculate Distance for 0.5 meters:
@@ -114,20 +114,42 @@ xlabel('Expected Distances (m)')
 ylabel('Distance (m)')
 ylim([0.4 1.2])
 title('Measured vs. Expected Distance (within 1m)')
+xtips1 = withinBar(1).XEndPoints;
+ytips1 = withinBar(1).YEndPoints;
+labels1 = string(withinBar(1).YData);
+text(xtips1,ytips1,labels1, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
+xtips2 = withinBar(2).XEndPoints;
+ytips2 = withinBar(2).YEndPoints;
+labels2 = string(withinBar(2).YData);
+text(xtips2,ytips2,labels2, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
+% Error Bars:
+withinDeviation = abs(encoderWithinDistances - [distance5000 distance6250 distance7500 distance8250 distance1000]);
+% Find x-coordinates of each bar
+numGroups = size(withinDistances, 1);
+numBarsPerGroup = size(withinDistances, 2);
+% Get bar positions
+xWithinPositions = nan(numGroups, numBarsPerGroup);
+for i = 1:numBarsPerGroup
+    xWithinPositions(:, i) = withinBar(i).XEndPoints; % Get x-coordinates
+end
+
+% Overlay error bars (assuming sonar is first and encoder is second in each group)
+errorbar(xWithinPositions(:, 1), [distance5000 distance6250 distance7500 distance8250 distance1000], withinDeviation, 'k.', 'LineWidth', 1.5);
+
 % plot Calculated Distance vs. Measured Distance (Beyond 1 Meter):
 beyondDistances = [encoderBeyondDistances(1) distance1000; encoderBeyondDistances(2) distance1100; encoderBeyondDistances(3) distance1200; encoderBeyondDistances(4) distance1300];
 actualBeyondDistances = categorical({'1.000', '1.100', '1.200', '1.300'});
 figure
 hold on
 beyondBar = bar(actualBeyondDistances, beyondDistances);
-xtips1 = beyondBar(1).XEndPoints;
-ytips1 = beyondBar(1).YEndPoints;
-labels1 = string(beyondBar(1).YData);
-text(xtips1, ytips1, labels1, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom')
-xtips2 = beyondBar(2).XEndPoints;
-ytips2 = beyondBar(2).YEndPoints;
-labels2 = string(beyondBar(2).YData);
-text(xtips2,ytips2,labels2,'HorizontalAlignment','center',...
+xtips3 = beyondBar(1).XEndPoints;
+ytips3 = beyondBar(1).YEndPoints;
+labels3 = string(beyondBar(1).YData);
+text(xtips3, ytips3, labels3, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
+xtips4 = beyondBar(2).XEndPoints;
+ytips4 = beyondBar(2).YEndPoints;
+labels4 = string(beyondBar(2).YData);
+text(xtips4,ytips4,labels4,'HorizontalAlignment','center',...
     'VerticalAlignment','bottom')
 legend('Measured Distances', 'Sonar Distances');
 xlabel('Expected Distances (m)');
