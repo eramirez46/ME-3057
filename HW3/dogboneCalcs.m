@@ -1,6 +1,6 @@
-%% Part 2 - Calibrating the Position Sensor and Rig Deformation
+%% Part 2, 3 - Calibrating the Position Sensor and Rig Deformation
 close all
-gainData = readcell("Block 3 Data Template.xlsx", 'useExcel', true, 'Sheet', "Part 2");
+% gainData = readcell("Block 3 Data Template.xlsx", 'useExcel', true, 'Sheet', "Part 2");
 
 positionCalibrationData = cell2mat(gainData(5:17, 2)); % mm
 voltageCalibrationData = cell2mat(gainData(5:17, 1)); % V
@@ -21,18 +21,23 @@ modelVoltage = linspace(min(voltageCalibrationData), max(voltageCalibrationData)
 modelPosition = linspace(min(positionCalibrationData), max(positionCalibrationData), 100);
 plot(modelVoltage, modelPosition, 'b');
 
+% rigDeformationData = readcell("Block 3 Data Template.xlsx", "useExcel", true, 'Sheet', 'Part 3');
+rigDeformationDataRange = 4:13443;
+positionRig = cell2mat(rigDeformationData(rigDeformationDataRange, 5));
+forceRig = cell2mat(rigDeformationData(rigDeformationDataRange, 2));
+[curveRig, goodnessRig] = fit(forceRig, positionRig, fittype({'x^2','x'}))
+
+
 %% Part 4 Climbing Sling Failure Testing
 
 % climbingSlingData = readcell("Block 3 Data Template.xlsx", 'useExcel', true, 'Sheet', 'Part 4');
 
-dataRange = 4:28083;
+dataRange = 2720:19058; % total columns: 28083, breaking point: 19058
 positionClimbing = cell2mat(climbingSlingData(dataRange, 5));
 forceClimbing = cell2mat(climbingSlingData(dataRange, 2));
-timeClimbing = cell2mat(climbingSlingData(dataRange, 1));
-stackedForcePosition = [forceClimbing, positionClimbing];
 figure
-stackedplot(timeClimbing, stackedForcePosition)
-
+[denoisedPosition_mm, denoisedForce_N] = smoothForceDisplacementData(positionClimbing, forceClimbing);
+plot(denoisedPosition_mm, denoisedForce_N)
 
 
 
