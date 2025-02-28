@@ -1,9 +1,6 @@
 %% Part 2, 3 - Calibrating the Position Sensor and Rig Deformation
 close all
-% gainData = readcell("Block 3 Data Template.xlsx", 'useExcel', true, 'Sheet', "Part 2");
-
-positionCalibrationData = cell2mat(gainData(5:17, 2)); % mm
-voltageCalibrationData = cell2mat(gainData(5:17, 1)); % V
+load("gainData.mat");
 kValue = 2;
 [curve, goodness] = fit(voltageCalibrationData, positionCalibrationData, 'poly1');
 positionUncertainty = goodness.rmse .* kValue;
@@ -20,25 +17,13 @@ plot(voltageCalibrationData, positionFitData - positionUncertainty, 'LineStyle',
 xlabel('Sensor Position (mm)')
 ylabel('Voltage (V)')
 fprintf('The displacement range is 0mm to  %.2f mm\n', 10.*positionUncertainty)
-
-% rigDeformationData = readcell("Block 3 Data Template.xlsx", "useExcel", true, 'Sheet', 'Part 3');
-rigDeformationDataRange = 4:13443;
+load('rigDeformationData.mat')
 [curveRig, goodnessRig] = fit(forceRig, positionRig, fittype({'x^2','x'}));
-figure
-hold on
-scatter(forceRig./1000, positionRig, 'bo', 'DisplayName', 'Deformation Data')
-% F_fit = linspace(min(forceRig), max(forceRig), 100)
-% D_fit = curveRig(F_fit)
-% plot(F_fit ./ 1000, D_fit)
 
 
 %% Part 4 Climbing Sling Failure Testing
 
-% climbingSlingData = readcell("Block 3 Data Template.xlsx", 'useExcel', true, 'Sheet', 'Part 4');
-
-dataRange = 2720:19058; % total columns: 28083, breaking point: 19058
-positionClimbing = cell2mat(climbingSlingData(dataRange, 5));
-forceClimbing = cell2mat(climbingSlingData(dataRange, 2));
+load('climbingSlingData.mat')
 figure
 hold on
 [denoisedPosition_mm, denoisedForce_N] = smoothForceDisplacementData(positionClimbing, forceClimbing);
@@ -46,6 +31,7 @@ denoisedForce_N = denoisedForce_N - min(denoisedForce_N);
 denoisedForce_kN = denoisedForce_N./1000
 denoisedPosition_mm = denoisedPosition_mm - min(denoisedPosition_mm)
 plot(denoisedPosition_mm, denoisedForce_N, 'o')
+load("Part_3_Data_Eric_M.mat");
 D_corrected_mm = denoisedPosition_mm - Quad_Rig_Fit(denoisedForce_N);
 maximumCorrection = max(curveRig(denoisedForce_N));
 plot(D_corrected_mm, denoisedForce_N, 'o')
