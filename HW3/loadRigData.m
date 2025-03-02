@@ -14,18 +14,17 @@
 % positionClimbing = cell2mat(climbingSlingData(dataRange, 5));
 % forceClimbing = cell2mat(climbingSlingData(dataRange, 2));
 % boltData = readcell("Block 3 Data Template.xlsx", 'useExcel', true, 'Sheet', 'Part 5');
-forceBolt1 = boltData(cellfun(@isnumeric, boltData(:, 2)), 2); % N
-dispBolt1 = boltData(cellfun(@isnumeric, boltData(:, 5)), 5); % mm
-forceBolt2 = boltData(cellfun(@isnumeric, boltData(:, 8)), 8); % N
-dispBolt2 = boltData(cellfun(@isnumeric, boltData(:, 11)), 11); % mm
-forceBolt3 = boltData(cellfun(@isnumeric, boltData(:, 14)), 14); % N
-dispBolt3 = boltData(cellfun(@isnumeric, boltData(:, 17)), 17); % mm
-forceBolt4 = boltData(cellfun(@isnumeric, boltData(:, 20)), 20); % N
-dispBolt4 = boltData(cellfun(@isnumeric, boltData(:, 23)), 23); % mm
-forceBolt5 = boltData(cellfun(@isnumeric, boltData(:, 26)), 26); % N
-dispBolt5 = boltData(cellfun(@isnumeric, boltData(:, 29)), 29); % mm
+forceBolt1 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 2)), 2)); % N
+dispBolt1 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 5)), 5)); % mm
+forceBolt2 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 8)), 8)); % N
+dispBolt2 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 11)), 11)); % mm
+forceBolt3 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 14)), 14)); % N
+dispBolt3 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 17)), 17)); % mm
+forceBolt4 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 20)), 20)); % N
+dispBolt4 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 23)), 23)); % mm
+forceBolt5 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 26)), 26)); % N
+dispBolt5 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 29)), 29)); % mm
 % dogboneData = readcell("Block 3 Data Template.xlsx", 'useExcel', true, 'Sheet', 'Part 6');
-
 % save("gainData", "voltageCalibrationData", "positionCalibrationData");
 % save("rigDeformationData", "positionRig", "forceRig");
 % save("climbingSlingData", "positionClimbing", "forceClimbing");
