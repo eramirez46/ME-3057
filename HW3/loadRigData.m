@@ -25,9 +25,12 @@ dispBolt4 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 23)), 23)); % mm
 forceBolt5 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 26)), 26)); % N
 dispBolt5 = cell2mat(boltData(cellfun(@isnumeric, boltData(:, 29)), 29)); % mm
 % dogboneData = readcell("Block 3 Data Template.xlsx", 'useExcel', true, 'Sheet', 'Part 6');
+forceDogbone = cell2mat(dogboneData(cellfun(@isnumeric, dogboneData(:, 2)), 2)); % N
+dispDogbone = cell2mat(dogboneData(cellfun(@isnumeric, dogboneData(:, 5)), 5)); % mm
 % save("gainData", "voltageCalibrationData", "positionCalibrationData");
 % save("rigDeformationData", "positionRig", "forceRig");
 % save("climbingSlingData", "positionClimbing", "forceClimbing");
 % save('forceSensorData', 'forceCalibrationData', 'voltageForceCalibrationData');
 save('boltData', 'forceBolt1', 'forceBolt2', 'forceBolt3', 'forceBolt4', 'forceBolt5', ...
     'dispBolt1', 'dispBolt2', 'dispBolt3', 'dispBolt4', 'dispBolt5');
+save('dogboneData', 'forceDogbone', 'dispDogbone');
